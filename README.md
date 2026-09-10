@@ -1,6 +1,13 @@
 # Репозиторий для отчётов и проектов по лабораторным.
 
-Репозиторий для отчётов и программ/проектов по лабораторному практикуму курса АПО ЭВМиС.
+ссылка на лабы:
+https://drive.google.com/file/d/18OdZ3tSw8mmfiVtORAj8f8PJTLvMJot5/view?usp=drive_link
+
+ссылка на электронную очередь:
+https://docs.google.com/spreadsheets/d/1FFfxMHh_qEtyVldmp9tDRgwITp5Y6SA4VW2Xh6iDvrs/edit?usp=sharing
+
+ссылка на электронную ведомость:
+https://docs.google.com/spreadsheets/d/1esBjBMWBkn2GBHyKEAzKP-CuAJUphPBEWrAmjG0f6pg/edit?usp=sharing
 
 ## Порядок работы
 
@@ -47,4 +54,5 @@ reports/ivanov/lab1/src/topology.pkt
   - **дубликат** (совпадение хэша или похожесть текста ≥ 90%) → проверка падает (красный крестик), PR нельзя мержить без ручного разбора;
   - **подозрительное сходство** (60–90%) → проверка проходит, но в Summary выводится предупреждение для проверяющего;
   - иначе — проверка зелёная.
+
 
