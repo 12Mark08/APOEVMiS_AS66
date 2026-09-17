@@ -10,8 +10,8 @@ static_assert(sizeof(char32_t) == 4, "A character must occupy four bytes");
 
 NOINLINE void replace_cpp(char32_t* text, std::size_t n) {
     // Positions 1, 3, 5 correspond to indices 0, 2, 4.
-    for (std::size_t i = 0; i < n; i += 2)
-        text[i] = U'+';
+    for (std::size_t i = 0, count = n / 2 + n % 2; i < count; ++i)
+        text[i * 2] = U'+';
 }
 
 NOINLINE void replace_asm(char32_t* text, std::size_t n) {
