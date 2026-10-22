@@ -6,45 +6,45 @@
 using namespace std;
 using namespace std::chrono;
 
-#define MAX_LEN    128       // размер буфера одной строки
-#define ITERATIONS 1000000   // число повторов для замера времени
+#define MAX_LEN    128
+#define ITERATIONS 1000000
 
-// ---------- Обработка строк на ассемблере ----------
-// Меняет местами 1-ю строку с 4-й и 2-ю с 3-й (побайтно по всему буферу)
+// РћР±СЂР°Р±РѕС‚РєР° СЃС‚СЂРѕРє РЅР° Р°СЃСЃРµРјР±Р»РµСЂРµ
+// РњРµРЅСЏРµС‚ РјРµСЃС‚Р°РјРё 1-СЋ СЃС‚СЂРѕРєСѓ СЃ 4-Р№ Рё 2-СЋ СЃ 3-Р№ (РїРѕР±Р°Р№С‚РЅРѕ РїРѕ РІСЃРµРјСѓ Р±СѓС„РµСЂСѓ)
 void swapAsm(char* s1, char* s2, char* s3, char* s4)
 {
     __asm {
-        mov esi, s1; ESI = адрес 1 - й строки
-        mov edi, s4; EDI = адрес 4 - й строки
-        mov ebx, s2; EBX = адрес 2 - й строки
-        mov edx, s3; EDX = адрес 3 - й строки
-        xor ecx, ecx; ECX = 0 (индекс текущего символа)
+        mov esi, s1; ESI = Р°РґСЂРµСЃ 1 - Р№ СЃС‚СЂРѕРєРё
+        mov edi, s4; EDI = Р°РґСЂРµСЃ 4 - Р№ СЃС‚СЂРѕРєРё
+        mov ebx, s2; EBX = Р°РґСЂРµСЃ 2 - Р№ СЃС‚СЂРѕРєРё
+        mov edx, s3; EDX = Р°РґСЂРµСЃ 3 - Р№ СЃС‚СЂРѕРєРё
+        xor ecx, ecx; ECX = 0 (РёРЅРґРµРєСЃ С‚РµРєСѓС‰РµРіРѕ СЃРёРјРІРѕР»Р°)
 
         SwapLoop:
-        ; --- обмен символов 1 - й и 4 - й строк-- -
+        ; --- РѕР±РјРµРЅ СЃРёРјРІРѕР»РѕРІ 1 - Р№ Рё 4 - Р№ СЃС‚СЂРѕРє-- -
             mov al, [esi + ecx]; AL = s1[i]
             mov ah, [edi + ecx]; AH = s4[i]
             mov[esi + ecx], ah; s1[i] = AH
             mov[edi + ecx], al; s4[i] = AL
 
-            ; --- обмен символов 2 - й и 3 - й строк-- -
+            ; --- РѕР±РјРµРЅ СЃРёРјРІРѕР»РѕРІ 2 - Р№ Рё 3 - Р№ СЃС‚СЂРѕРє-- -
             mov al, [ebx + ecx]; AL = s2[i]
             mov ah, [edx + ecx]; AH = s3[i]
             mov[ebx + ecx], ah; s2[i] = AH
             mov[edx + ecx], al; s3[i] = AL
 
-            inc ecx; переходим к следующему символу
-            cmp ecx, MAX_LEN; дошли до конца буфера ?
-            jb SwapLoop; если нет — продолжаем цикл
+            inc ecx; РїРµСЂРµС…РѕРґРёРј Рє СЃР»РµРґСѓСЋС‰РµРјСѓ СЃРёРјРІРѕР»Сѓ
+            cmp ecx, MAX_LEN; РґРѕС€Р»Рё РґРѕ РєРѕРЅС†Р° Р±СѓС„РµСЂР° ?
+            jb SwapLoop; РµСЃР»Рё РЅРµС‚ вЂ” РїСЂРѕРґРѕР»Р¶Р°РµРј С†РёРєР»
     }
 }
 
-// ---------- Та же обработка на C++ ----------
+// РўР° Р¶Рµ РѕР±СЂР°Р±РѕС‚РєР° РЅР° C++
 void swapCpp(char* s1, char* s2, char* s3, char* s4)
 {
     for (int i = 0; i < MAX_LEN; i++) {
-        char t = s1[i]; s1[i] = s4[i]; s4[i] = t;   // 1-я <-> 4-я
-        t = s2[i];      s2[i] = s3[i]; s3[i] = t;   // 2-я <-> 3-я
+        char t = s1[i]; s1[i] = s4[i]; s4[i] = t;
+        t = s2[i];      s2[i] = s3[i]; s3[i] = t;
     }
 }
 
@@ -52,7 +52,7 @@ void printStrings(const char* title, char s[4][MAX_LEN])
 {
     cout << title << endl;
     for (int i = 0; i < 4; i++)
-        cout << "  Строка " << i + 1 << ": " << s[i] << endl;
+        cout << "  РЎС‚СЂРѕРєР° " << i + 1 << ": " << s[i] << endl;
 }
 
 int main()
@@ -60,28 +60,28 @@ int main()
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
 
-    char src[4][MAX_LEN] = {};      // исходные строки
-    char resCpp[4][MAX_LEN];        // результат C++
-    char resAsm[4][MAX_LEN];        // результат ASM
+    char src[4][MAX_LEN] = {};
+    char resCpp[4][MAX_LEN];
+    char resAsm[4][MAX_LEN];
 
     for (int i = 0; i < 4; i++) {
-        cout << "Введите строку " << i + 1 << ": ";
+        cout << "Р’РІРµРґРёС‚Рµ СЃС‚СЂРѕРєСѓ " << i + 1 << ": ";
         cin.getline(src[i], MAX_LEN);
     }
 
     memcpy(resCpp, src, sizeof(src));
     memcpy(resAsm, src, sizeof(src));
 
-    // --- однократная обработка для вывода результата ---
+    // РѕРґРЅРѕРєСЂР°С‚РЅР°СЏ РѕР±СЂР°Р±РѕС‚РєР° РґР»СЏ РІС‹РІРѕРґР° СЂРµР·СѓР»СЊС‚Р°С‚Р°
     swapCpp(resCpp[0], resCpp[1], resCpp[2], resCpp[3]);
     swapAsm(resAsm[0], resAsm[1], resAsm[2], resAsm[3]);
 
     cout << endl;
-    printStrings("Исходные строки:", src);
-    printStrings("\nРезультат C++:", resCpp);
-    printStrings("\nРезультат ASM:", resAsm);
+    printStrings("РСЃС…РѕРґРЅС‹Рµ СЃС‚СЂРѕРєРё:", src);
+    printStrings("\nР РµР·СѓР»СЊС‚Р°С‚ C++:", resCpp);
+    printStrings("\nР РµР·СѓР»СЊС‚Р°С‚ ASM:", resAsm);
 
-    // --- замер быстродействия (многократный вызов) ---
+    // Р·Р°РјРµСЂ Р±С‹СЃС‚СЂРѕРґРµР№СЃС‚РІРёСЏ (РјРЅРѕРіРѕРєСЂР°С‚РЅС‹Р№ РІС‹Р·РѕРІ)
     char work[4][MAX_LEN];
     memcpy(work, src, sizeof(src));
 
@@ -98,11 +98,11 @@ int main()
     long long timeCpp = duration_cast<microseconds>(endCpp - startCpp).count();
     long long timeAsm = duration_cast<microseconds>(endAsm - startAsm).count();
 
-    cout << "\nЧисло повторов: " << ITERATIONS << endl;
-    cout << "Время C++: " << timeCpp << " мкс ("
-        << timeCpp * 1000.0 / ITERATIONS << " нс на вызов)" << endl;
-    cout << "Время ASM: " << timeAsm << " мкс ("
-        << timeAsm * 1000.0 / ITERATIONS << " нс на вызов)" << endl;
+    cout << "\nР§РёСЃР»Рѕ РїРѕРІС‚РѕСЂРѕРІ: " << ITERATIONS << endl;
+    cout << "Р’СЂРµРјСЏ C++: " << timeCpp << " РјРєСЃ ("
+        << timeCpp * 1000.0 / ITERATIONS << " РЅСЃ РЅР° РІС‹Р·РѕРІ)" << endl;
+    cout << "Р’СЂРµРјСЏ ASM: " << timeAsm << " РјРєСЃ ("
+        << timeAsm * 1000.0 / ITERATIONS << " РЅСЃ РЅР° РІС‹Р·РѕРІ)" << endl;
 
     return 0;
 }
